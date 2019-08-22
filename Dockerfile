@@ -2,9 +2,10 @@ FROM alpine:3.9 as alpine
 
 RUN apk add --no-cache \
     ca-certificates \
-    tzdata
+    tzdata \
+    wget
 
-FROM scratch
+FROM busybox
 LABEL "com.centurylinklabs.watchtower"="true"
 
 COPY --from=alpine \
@@ -13,6 +14,9 @@ COPY --from=alpine \
 COPY --from=alpine \
     /usr/share/zoneinfo \
     /usr/share/zoneinfo
+COPY --from=alpine \
+    /usr/bin/wget \
+    /wget
 
 COPY watchtower /
 ENTRYPOINT ["/watchtower"]

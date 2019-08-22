@@ -1,0 +1,18 @@
+version: "3"
+services:
+  watchtower:
+    image: containrrr/watchtower:amd64-SNAPSHOT-b65a1c9
+    environment:
+      - AWS_ACCESS_KEY_ID=...
+      - AWS_SECRET_ACCESS_KEY=...
+    labels:
+      com.centurylinklabs.watchtower.lifecycle.pre-check: "/start.sh"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/config.json:/config.json
+      - ./start.sh:/start.sh
+    command: --interval 10 --enable-lifecycle-hooks --debug
+  server:
+    image: ...
+    ports:
+     - "8001:8001"
